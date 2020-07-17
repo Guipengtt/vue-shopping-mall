@@ -31,3 +31,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
   - router 路由
   - store Vuex 状态管理
   - network 网络请求封装
+  - common 公共 js 文件
