@@ -5,6 +5,7 @@
       :key="index"
       class="tab-control-item"
       :class="{active: index == currentIndex}"
+      @click="itemClick(index)"
     >
       <span>{{item}}</span>
     </div>
@@ -26,6 +27,12 @@ export default {
     return {
       currentIndex: 0
     };
+  },
+  methods: {
+    itemClick(index) {
+      this.currentIndex = index;
+      this.$emit("tabClick", index);
+    }
   }
 };
 </script>
@@ -34,22 +41,25 @@ export default {
 .tab-control {
   display: flex;
   text-align: center;
+  line-height: 40px;
   font-size: 15px;
+  background-color: #fff;
+  z-index: 9;
 }
+
 .tab-control-item {
   flex: 1;
-  height: 44px;
-  line-height: 40px;
 }
+
+.tab-control-item span {
+  padding: 5px;
+}
+
 .active {
   color: var(--color-high-text);
 }
 
 .active span {
-  border-bottom: 3px solid var(--color-tint);
-}
-
-.tab-control-item span {
-  padding: 5px;
+  border-bottom: 2px solid var(--color-high-text);
 }
 </style>

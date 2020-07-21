@@ -13,11 +13,11 @@ export default {
 </script>
 
 <style scoped>
-/* .freature img {
+.feature img {
   width: 100%;
-} */
+}
 
-.feature {
+/* .feature {
   display: flex;
   margin-top: 10px;
   font-size: 14px;
@@ -28,10 +28,10 @@ export default {
 .feature-item {
   flex: 1;
   text-align: center;
-}
+} */
 
-.feature img {
+/* .feature img {
   width: 100%;
   margin-bottom: 10px;
-}
+} */
 </style>
