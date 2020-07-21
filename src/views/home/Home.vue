@@ -119,11 +119,9 @@ export default {
         this.recommends = res.data.data.recommend.list;
 
         for (let item in this.banners) {
-          console.log(item);
           let str = this.banners[item].image.replace("s10", "s3");
           this.banners[item].image = str;
         }
-
         for (let item in this.recommends) {
           let str = this.recommends[item].image.replace("s10", "s3");
           this.recommends[item].image = str;

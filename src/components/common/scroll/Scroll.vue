@@ -45,7 +45,6 @@ export default {
 
     // 3. 监听上拉事件
     this.scroll.on("pullingUp", () => {
-      console.log("上拉");
       this.$emit("pullingUp");
     });
   },
