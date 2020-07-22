@@ -11,21 +11,15 @@
       @scroll="contentScroll"
       :pull-up-load="true"
       @pullingUp="loadMore"
-      ><home-swiper :banners="banners"></home-swiper>
+    >
+      <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-v-iew></feature-v-iew>
-      <tab-control
-        :titles="['流行', '新款', '精选']"
-        class="tab-control"
-        @tabClick="tabClick"
-      ></tab-control>
+      <tab-control :titles="['流行', '新款', '精选']" class="tab-control" @tabClick="tabClick"></tab-control>
       <goods-list v-if="typeSelect == 0" :good="goods.pop.list"></goods-list>
-      <goods-list
-        v-else-if="typeSelect == 1"
-        :good="goods.new.list"
-      ></goods-list>
-      <goods-list v-else :good="goods.sell.list"></goods-list
-    ></scroll>
+      <goods-list v-else-if="typeSelect == 1" :good="goods.new.list"></goods-list>
+      <goods-list v-else :good="goods.sell.list"></goods-list>
+    </scroll>
     <back-top @click.native="backClick" v-show="showBack"></back-top>
   </div>
 </template>
@@ -87,6 +81,11 @@ export default {
     this.getHomeGoods(this.goods.pop);
     this.getHomeGoods(this.goods.new);
     this.getHomeGoods(this.goods.sell);
+
+    // 监听事件总线
+    this.$bus.$on("itemImageLoad", () => {
+      this.$refs.scroll.refresh();
+    });
   },
   methods: {
     /*
