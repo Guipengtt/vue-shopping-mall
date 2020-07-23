@@ -1,13 +1,11 @@
 <template>
-  <div class="goods">
-    <a :href="goodsItem.link">
-      <img :src="goodsItem.show.img" :alt="goodsIndex" @load="imgLoad" />
-      <div class="goods-info">
-        <p>{{goodsItem.title}}</p>
-        <span class="price">{{"价格:"}}{{goodsItem.price}}</span>
-        <span class="collect">{{goodsItem.cfav}}</span>
-      </div>
-    </a>
+  <div class="goods" @click="itemClick">
+    <img :src="goodsItem.show.img" :alt="goodsIndex" @load="imgLoad" />
+    <div class="goods-info">
+      <p>{{goodsItem.title}}</p>
+      <span class="price">{{"价格:"}}{{goodsItem.price}}</span>
+      <span class="collect">{{goodsItem.cfav}}</span>
+    </div>
   </div>
 </template>
 
@@ -31,6 +29,10 @@ export default {
   methods: {
     imgLoad() {
       this.$bus.$emit("itemImageLoad");
+    },
+    itemClick() {
+      console.log("跳转到详情页");
+      this.$router.push("/detail/" + this.goodsItem.iid);
     }
   }
 };
