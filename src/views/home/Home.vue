@@ -56,7 +56,7 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop
+    BackTop,
   },
   data() {
     return {
@@ -66,24 +66,24 @@ export default {
         pop: {
           type: "pop",
           page: 0,
-          list: []
+          list: [],
         },
         new: {
           type: "new",
           page: 0,
-          list: []
+          list: [],
         },
         sell: {
           type: "sell",
           page: 0,
-          list: []
-        }
+          list: [],
+        },
       },
       typeSelect: 0,
       showBack: false,
       tabOffsetTop: 0,
       isFixed: false,
-      saveY: 0
+      saveY: 0,
     };
   },
   created() {
@@ -142,7 +142,7 @@ export default {
     网络请求相关方法
     */
     getHomeMultiData() {
-      getHomeMultiData().then(res => {
+      getHomeMultiData().then((res) => {
         this.banners = res.data.data.banner.list;
         this.recommends = res.data.data.recommend.list;
 
@@ -158,7 +158,7 @@ export default {
     },
     getHomeGoods(type) {
       const page = type.page + 1;
-      getHomeGoods(type.type, page).then(res => {
+      getHomeGoods(type.type, page).then((res) => {
         type.list.push(...res.data.data.list);
         type.page += 1;
 
@@ -178,7 +178,7 @@ export default {
           this.getHomeGoods(this.goods.sell);
           break;
       }
-    }
+    },
   },
 
   activated() {
@@ -188,7 +188,7 @@ export default {
 
   deactivated() {
     this.saveY = this.$refs.scroll.getScrollY();
-  }
+  },
 };
 </script>
 
@@ -200,13 +200,6 @@ export default {
 .home-nav {
   background-color: var(--color-tint);
   color: white;
-
-  /* 在浏览器原生滚动时可以使用 */
-  /* position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 9px; */
 }
 
 .content {

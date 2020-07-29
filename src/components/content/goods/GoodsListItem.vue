@@ -17,24 +17,23 @@ export default {
       type: Object,
       default() {
         return {};
-      }
+      },
     },
     goodsIndex: {
       type: Number,
       default() {
         return 0;
-      }
-    }
+      },
+    },
   },
   methods: {
     imgLoad() {
       this.$bus.$emit("itemImageLoad");
     },
     itemClick() {
-      console.log("跳转到详情页");
       this.$router.push("/detail/" + this.goodsItem.iid);
-    }
-  }
+    },
+  },
 };
 </script>
 
