@@ -45,6 +45,7 @@ import FeatureVIew from "@/views/home/FeatureVIew";
 import { getHomeMultiData, getHomeGoods } from "@/network/home";
 
 import { debouncs } from "@/common/utils";
+import { itemListenerMixin } from "@/common/mixins";
 
 export default {
   name: "Home",
@@ -84,6 +85,7 @@ export default {
       tabOffsetTop: 0,
       isFixed: false,
       saveY: 0,
+      itemListener: null,
     };
   },
   created() {
@@ -95,13 +97,8 @@ export default {
     this.getHomeGoods(this.goods.sell);
   },
 
+  mixins: [itemListenerMixin],
   mounted() {
-    // 监听事件总线 + 防抖动
-    const refresh = debouncs(this.$refs.scroll.refresh, 200);
-    this.$bus.$on("itemImageLoad", () => {
-      refresh();
-    });
-
     // 获取tabControl Offset
     this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop;
   },
@@ -147,11 +144,11 @@ export default {
         this.recommends = res.data.data.recommend.list;
 
         for (let item in this.banners) {
-          let str = this.banners[item].image.replace("s10", "s3");
+          let str = this.banners[item].image.replace("s10", "s11");
           this.banners[item].image = str;
         }
         for (let item in this.recommends) {
-          let str = this.recommends[item].image.replace("s10", "s3");
+          let str = this.recommends[item].image.replace("s10", "s11");
           this.recommends[item].image = str;
         }
       });
@@ -187,7 +184,11 @@ export default {
   },
 
   deactivated() {
+    // 保存Y值
     this.saveY = this.$refs.scroll.getScrollY();
+
+    // 取消全值事件的监听
+    this.$bus.$off("itemImageLoad", this.itemListener);
   },
 };
 </script>

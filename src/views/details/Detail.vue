@@ -8,6 +8,7 @@
       <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"></detail-goods-info>
       <detail-param-info :paramInfo="goodsParam"></detail-param-info>
       <detail-comment-info :commentInfo="commentInfo"></detail-comment-info>
+      <goods-list :good="recommends"></goods-list>
     </scroll>
   </div>
 </template>
@@ -21,9 +22,19 @@ import DetailGoodsInfo from "@/views/details/childComps/DetailGoodsInfo";
 import DetailParamInfo from "@/views/details/childComps/DetailParamInfo";
 import DetailCommentInfo from "@/views/details/DetailCommentInfo";
 
-import Scroll from "@/components/common/scroll/Scroll";
+import GoodsList from "@/components/content/goods/GoodsList";
 
-import { getDetails, Goods, Shop, GoodsParam } from "@/network/detail";
+import Scroll from "@/components/common/scroll/Scroll";
+import { debouncs } from "@/common/utils";
+import { itemListenerMixin } from "@/common/mixins";
+
+import {
+  getDetails,
+  Goods,
+  Shop,
+  GoodsParam,
+  getRecommend,
+} from "@/network/detail";
 
 export default {
   name: "Detail",
@@ -36,6 +47,8 @@ export default {
       detailInfo: {},
       goodsParam: {},
       commentInfo: {},
+      recommends: [],
+      itemListener: null,
     };
   },
   components: {
@@ -47,6 +60,7 @@ export default {
     DetailParamInfo,
     DetailCommentInfo,
     Scroll,
+    GoodsList,
   },
   created() {
     // 得到商品iid
@@ -55,7 +69,6 @@ export default {
     // 请求数据
     getDetails(this.iid).then((res) => {
       const data = res.data.result;
-      console.log(res);
       // 1. 获取顶部图片(轮播数据)
       this.topImages = data.itemInfo.topImages;
 
@@ -83,12 +96,23 @@ export default {
         this.commentInfo = data.rate.list[0];
       }
     });
+
+    // 获取推荐数据
+    getRecommend().then((res) => {
+      this.recommends = res.data.data.list;
+    });
   },
 
   methods: {
     imageLoad() {
       this.$refs.scroll.refresh();
     },
+  },
+  mixins: [itemListenerMixin],
+  mounted() {},
+
+  destroyed() {
+    this.$bus.$off("itemImageLoad", this.itemListener);
   },
 };
 </script>
