@@ -34,6 +34,7 @@ export default {
   methods: {
     btnClick(index) {
       this.currentIndex = index;
+      this.$emit("titleClick", index);
     },
 
     goBack() {

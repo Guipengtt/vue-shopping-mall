@@ -11,7 +11,6 @@
         v-for="(item, index) in detailInfo.detailImage[0].list"
         :key="index"
         :src="item"
-        alt
         @load="imgLoad"
       />
     </div>
@@ -34,9 +33,7 @@ export default {
   },
   methods: {
     imgLoad() {
-      if (this.counter++ == this.imagesLength) {
-        this.$emit("imageLoad");
-      }
+      this.$emit("imageLoad");
     },
   },
   watch: {

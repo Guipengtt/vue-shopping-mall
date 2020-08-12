@@ -1,15 +1,16 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav"></detail-nav-bar>
-    <scroll class="content" ref="scroll">
+    <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="nav"></detail-nav-bar>
+    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
       <detail-swaper :top-images="topImages"></detail-swaper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
       <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"></detail-goods-info>
-      <detail-param-info :paramInfo="goodsParam"></detail-param-info>
-      <detail-comment-info :commentInfo="commentInfo"></detail-comment-info>
-      <goods-list :good="recommends"></goods-list>
+      <detail-param-info ref="params" :paramInfo="goodsParam"></detail-param-info>
+      <detail-comment-info ref="comment" :commentInfo="commentInfo"></detail-comment-info>
+      <goods-list ref="recommends" :good="recommends"></goods-list>
     </scroll>
+    <detail-bottom-bar></detail-bottom-bar>
   </div>
 </template>
 
@@ -20,7 +21,8 @@ import DetailBaseInfo from "@/views/details/childComps/DetailBaseInfo";
 import DetailShopInfo from "@/views/details/childComps/DetailShopInfo";
 import DetailGoodsInfo from "@/views/details/childComps/DetailGoodsInfo";
 import DetailParamInfo from "@/views/details/childComps/DetailParamInfo";
-import DetailCommentInfo from "@/views/details/DetailCommentInfo";
+import DetailCommentInfo from "@/views/details/childComps/DetailCommentInfo";
+import DetailBottomBar from "@/views/details/childComps/DetailBottomBar";
 
 import GoodsList from "@/components/content/goods/GoodsList";
 
@@ -49,6 +51,9 @@ export default {
       commentInfo: {},
       recommends: [],
       itemListener: null,
+      themeTops: [],
+      getThemeTopYs: null,
+      currentIndex: 0,
     };
   },
   components: {
@@ -59,6 +64,7 @@ export default {
     DetailGoodsInfo,
     DetailParamInfo,
     DetailCommentInfo,
+    DetailBottomBar,
     Scroll,
     GoodsList,
   },
@@ -95,6 +101,15 @@ export default {
       if (data.rate.cRate != 0) {
         this.commentInfo = data.rate.list[0];
       }
+
+      this.getThemeTopYs = debouncs(() => {
+        this.themeTops = [];
+        this.themeTops.push(0);
+        this.themeTops.push(this.$refs.params.$el.offsetTop);
+        this.themeTops.push(this.$refs.comment.$el.offsetTop);
+        this.themeTops.push(this.$refs.recommends.$el.offsetTop);
+        this.themeTops.push(Number.MAX_VALUE);
+      }, 500);
     });
 
     // 获取推荐数据
@@ -106,6 +121,24 @@ export default {
   methods: {
     imageLoad() {
       this.$refs.scroll.refresh();
+      this.getThemeTopYs();
+    },
+    titleClick(index) {
+      this.$refs.scroll.scrollTo(0, -(this.themeTops[index] - 44), 200);
+    },
+    contentScroll(position) {
+      const positionY = -position.y;
+      let length = this.themeTops.length;
+      for (let i = 0; i < length - 1; i++) {
+        if (
+          this.currentIndex !== i &&
+          positionY >= this.themeTops[i] &&
+          positionY < this.themeTops[i + 1]
+        ) {
+          this.currentIndex = i;
+          this.$refs.nav.currentIndex = this.currentIndex;
+        }
+      }
     },
   },
   mixins: [itemListenerMixin],
@@ -126,7 +159,7 @@ export default {
 }
 
 .content {
-  height: calc(100% - 44px);
+  height: calc(100% - 44px - 49px);
 }
 
 .detail-nav {
