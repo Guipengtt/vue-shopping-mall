@@ -10,7 +10,8 @@
       <detail-comment-info ref="comment" :commentInfo="commentInfo"></detail-comment-info>
       <goods-list ref="recommends" :good="recommends"></goods-list>
     </scroll>
-    <detail-bottom-bar></detail-bottom-bar>
+    <back-top @click.native="backClick" v-show="showBack"></back-top>
+    <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
   </div>
 </template>
 
@@ -28,7 +29,7 @@ import GoodsList from "@/components/content/goods/GoodsList";
 
 import Scroll from "@/components/common/scroll/Scroll";
 import { debouncs } from "@/common/utils";
-import { itemListenerMixin } from "@/common/mixins";
+import { itemListenerMixin, backTopMixin } from "@/common/mixins";
 
 import {
   getDetails,
@@ -40,6 +41,7 @@ import {
 
 export default {
   name: "Detail",
+  mixins: [itemListenerMixin, backTopMixin],
   data() {
     return {
       iid: null,
@@ -127,6 +129,8 @@ export default {
       this.$refs.scroll.scrollTo(0, -(this.themeTops[index] - 44), 200);
     },
     contentScroll(position) {
+      this.showBack = -position.y > 1000;
+
       const positionY = -position.y;
       let length = this.themeTops.length;
       for (let i = 0; i < length - 1; i++) {
@@ -140,8 +144,17 @@ export default {
         }
       }
     },
+    addToCart() {
+      const product = {};
+      product.image = this.topImages[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice;
+      product.iid = this.iid;
+
+      this.$store.dispatch("addCart", product);
+    },
   },
-  mixins: [itemListenerMixin],
   mounted() {},
 
   destroyed() {

@@ -36,7 +36,6 @@ import NavBar from "@/components/common/navBar/NavBar";
 import TabControl from "@/components/content/tabControl/TabControl";
 import GoodsList from "@/components/content/goods/GoodsList";
 import Scroll from "@/components/common/scroll/Scroll";
-import BackTop from "@/components/content/backTop/BackTop";
 
 import HomeSwiper from "@/views/home/childComps/HomeSwiper";
 import RecommendView from "@/views/home/childComps/RecommendView";
@@ -45,7 +44,7 @@ import FeatureVIew from "@/views/home/FeatureVIew";
 import { getHomeMultiData, getHomeGoods } from "@/network/home";
 
 import { debouncs } from "@/common/utils";
-import { itemListenerMixin } from "@/common/mixins";
+import { itemListenerMixin, backTopMixin } from "@/common/mixins";
 
 export default {
   name: "Home",
@@ -57,8 +56,8 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop,
   },
+  mixins: [itemListenerMixin, backTopMixin],
   data() {
     return {
       banners: [],
@@ -81,7 +80,6 @@ export default {
         },
       },
       typeSelect: 0,
-      showBack: false,
       tabOffsetTop: 0,
       isFixed: false,
       saveY: 0,
@@ -97,7 +95,6 @@ export default {
     this.getHomeGoods(this.goods.sell);
   },
 
-  mixins: [itemListenerMixin],
   mounted() {
     // 获取tabControl Offset
     this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop;
@@ -117,10 +114,6 @@ export default {
 
       this.$refs.tabControl1.currentIndex = index;
       this.$refs.tabControl.currentIndex = index;
-    },
-
-    backClick() {
-      this.$refs.scroll.scrollTo(0, 0, 500);
     },
 
     contentScroll(position) {
