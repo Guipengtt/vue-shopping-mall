@@ -1,13 +1,31 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="nav"></detail-nav-bar>
-    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
+    <detail-nav-bar
+      class="detail-nav"
+      @titleClick="titleClick"
+      ref="nav"
+    ></detail-nav-bar>
+    <scroll
+      class="content"
+      ref="scroll"
+      :probe-type="3"
+      @scroll="contentScroll"
+    >
       <detail-swaper :top-images="topImages"></detail-swaper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
-      <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"></detail-goods-info>
-      <detail-param-info ref="params" :paramInfo="goodsParam"></detail-param-info>
-      <detail-comment-info ref="comment" :commentInfo="commentInfo"></detail-comment-info>
+      <detail-goods-info
+        :detail-info="detailInfo"
+        @imageLoad="imageLoad"
+      ></detail-goods-info>
+      <detail-param-info
+        ref="params"
+        :paramInfo="goodsParam"
+      ></detail-param-info>
+      <detail-comment-info
+        ref="comment"
+        :commentInfo="commentInfo"
+      ></detail-comment-info>
       <goods-list ref="recommends" :good="recommends"></goods-list>
     </scroll>
     <back-top @click.native="backClick" v-show="showBack"></back-top>
@@ -36,7 +54,7 @@ import {
   Goods,
   Shop,
   GoodsParam,
-  getRecommend,
+  getRecommend
 } from "@/network/detail";
 
 export default {
@@ -55,7 +73,7 @@ export default {
       itemListener: null,
       themeTops: [],
       getThemeTopYs: null,
-      currentIndex: 0,
+      currentIndex: 0
     };
   },
   components: {
@@ -68,14 +86,14 @@ export default {
     DetailCommentInfo,
     DetailBottomBar,
     Scroll,
-    GoodsList,
+    GoodsList
   },
   created() {
     // 得到商品iid
     this.iid = this.$route.params.iid;
 
     // 请求数据
-    getDetails(this.iid).then((res) => {
+    getDetails(this.iid).then(res => {
       const data = res.data.result;
       // 1. 获取顶部图片(轮播数据)
       this.topImages = data.itemInfo.topImages;
@@ -115,7 +133,7 @@ export default {
     });
 
     // 获取推荐数据
-    getRecommend().then((res) => {
+    getRecommend().then(res => {
       this.recommends = res.data.data.list;
     });
   },
@@ -152,14 +170,16 @@ export default {
       product.price = this.goods.realPrice;
       product.iid = this.iid;
 
-      this.$store.dispatch("addCart", product);
-    },
+      this.$store.dispatch("addCart", product).then(res => {
+        console.log(res);
+      });
+    }
   },
   mounted() {},
 
   destroyed() {
     this.$bus.$off("itemImageLoad", this.itemListener);
-  },
+  }
 };
 </script>
 

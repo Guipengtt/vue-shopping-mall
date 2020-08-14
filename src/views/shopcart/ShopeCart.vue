@@ -4,9 +4,10 @@
       <div slot="center">购物车({{cartLength}})</div>
     </nav-bar>
 
-    <scroll class="content">
+    <scroll class="content" ref="scroll">
       <cart-list class="cart-list"></cart-list>
     </scroll>
+    <cart-buttom-bar></cart-buttom-bar>
   </div>
 </template>
 
@@ -14,6 +15,7 @@
 import NavBar from "@/components/common/navBar/NavBar";
 import CartList from "@/views/shopcart/childComps/CartList";
 import Scroll from "@/components/common/scroll/Scroll";
+import CartButtomBar from "@/views/shopcart/childComps/CartButtomBar";
 
 import { mapGetters } from "vuex";
 
@@ -22,10 +24,14 @@ export default {
   components: {
     NavBar,
     CartList,
+    CartButtomBar,
     Scroll,
   },
   computed: {
     ...mapGetters(["cartLength"]),
+  },
+  activated() {
+    this.$refs.scroll.refresh();
   },
 };
 </script>
@@ -46,7 +52,7 @@ export default {
   overflow: hidden;
   position: absolute;
   top: 44px;
-  bottom: 49px;
+  bottom: 89px;
   left: 0;
   right: 0;
 }
