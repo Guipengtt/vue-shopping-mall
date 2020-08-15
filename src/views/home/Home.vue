@@ -19,12 +19,22 @@
       :pull-up-load="true"
       @pullingUp="loadMore"
     >
-      <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad"></home-swiper>
+      <home-swiper
+        :banners="banners"
+        @swiperImageLoad="swiperImageLoad"
+      ></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-v-iew></feature-v-iew>
-      <tab-control :titles="['流行', '新款', '精选']" @tabClick="tabClick" ref="tabControl"></tab-control>
+      <tab-control
+        :titles="['流行', '新款', '精选']"
+        @tabClick="tabClick"
+        ref="tabControl"
+      ></tab-control>
       <goods-list v-if="typeSelect == 0" :good="goods.pop.list"></goods-list>
-      <goods-list v-else-if="typeSelect == 1" :good="goods.new.list"></goods-list>
+      <goods-list
+        v-else-if="typeSelect == 1"
+        :good="goods.new.list"
+      ></goods-list>
       <goods-list v-else :good="goods.sell.list"></goods-list>
     </scroll>
     <back-top @click.native="backClick" v-show="showBack"></back-top>
@@ -55,7 +65,7 @@ export default {
     FeatureVIew,
     TabControl,
     GoodsList,
-    Scroll,
+    Scroll
   },
   mixins: [itemListenerMixin, backTopMixin],
   data() {
@@ -66,24 +76,24 @@ export default {
         pop: {
           type: "pop",
           page: 0,
-          list: [],
+          list: []
         },
         new: {
           type: "new",
           page: 0,
-          list: [],
+          list: []
         },
         sell: {
           type: "sell",
           page: 0,
-          list: [],
-        },
+          list: []
+        }
       },
       typeSelect: 0,
       tabOffsetTop: 0,
       isFixed: false,
       saveY: 0,
-      itemListener: null,
+      itemListener: null
     };
   },
   created() {
@@ -132,7 +142,7 @@ export default {
     网络请求相关方法
     */
     getHomeMultiData() {
-      getHomeMultiData().then((res) => {
+      getHomeMultiData().then(res => {
         this.banners = res.data.data.banner.list;
         this.recommends = res.data.data.recommend.list;
 
@@ -148,11 +158,13 @@ export default {
     },
     getHomeGoods(type) {
       const page = type.page + 1;
-      getHomeGoods(type.type, page).then((res) => {
+      getHomeGoods(type.type, page).then(res => {
         type.list.push(...res.data.data.list);
         type.page += 1;
 
         this.$refs.scroll.finishPullUp();
+
+        this.$toast.show("正在加载更多商品", 2000);
       });
     },
 
@@ -168,7 +180,7 @@ export default {
           this.getHomeGoods(this.goods.sell);
           break;
       }
-    },
+    }
   },
 
   activated() {
@@ -182,7 +194,7 @@ export default {
 
     // 取消全值事件的监听
     this.$bus.$off("itemImageLoad", this.itemListener);
-  },
+  }
 };
 </script>
 
