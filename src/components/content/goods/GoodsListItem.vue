@@ -2,9 +2,9 @@
   <div class="goods" @click="itemClick">
     <img :src="showImage" :alt="goodsIndex" @load="imgLoad" />
     <div class="goods-info">
-      <p>{{goodsItem.title}}</p>
-      <span class="price">{{"价格:"}}{{goodsItem.price}}</span>
-      <span class="collect">{{goodsItem.cfav}}</span>
+      <p>{{ goodsItem.title }}</p>
+      <span class="price">{{ "价格:" }}{{ goodsItem.price }}</span>
+      <span class="collect">{{ goodsItem.cfav }}</span>
     </div>
   </div>
 </template>
@@ -17,20 +17,20 @@ export default {
       type: Object,
       default() {
         return {};
-      },
+      }
     },
     goodsIndex: {
       type: Number,
       default() {
         return 0;
-      },
-    },
+      }
+    }
   },
 
   computed: {
     showImage() {
       return this.goodsItem.image || this.goodsItem.show.img;
-    },
+    }
   },
 
   methods: {
@@ -38,9 +38,9 @@ export default {
       this.$bus.$emit("itemImageLoad");
     },
     itemClick() {
-      this.$router.push("/detail/" + this.goodsItem.iid).catch((err) => err);
-    },
-  },
+      this.$router.push("/detail/" + this.goodsItem.iid).catch(err => err);
+    }
+  }
 };
 </script>
 
@@ -48,7 +48,7 @@ export default {
 .goods {
   padding-bottom: 40px;
   position: relative;
-  width: 50%;
+  width: 48%;
 }
 .goods img {
   width: 100%;
