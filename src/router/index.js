@@ -38,7 +38,7 @@ const routes = [{
 
 const router = new Vuerouter({
   routes,
-  mode: "history",
+  // mode: "history",
 })
 
 export default router;
